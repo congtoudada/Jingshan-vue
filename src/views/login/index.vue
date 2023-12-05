@@ -54,6 +54,11 @@
 
 <script>
 import { validUsername } from '@/utils/validate'
+import CryptoJS from 'crypto-js';
+
+  // console.log(data.loginForm.password)
+  // crytoData = data
+  // crytoData.loginForm.password = CryptoJS.MD5(data.loginForm.password)
 
 export default {
   name: 'Login',
@@ -109,7 +114,13 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
+          // 深拷贝加密
+          let cryptoForm = {
+            username: this.loginForm.username,
+            password: this.loginForm.password
+          }
+          cryptoForm.password = CryptoJS.MD5(cryptoForm.password).toString(CryptoJS.enc.Hex)
+          this.$store.dispatch('user/login', cryptoForm).then(() => {
             this.$router.push({ path: this.redirect || '/' })
             this.loading = false
           }).catch(() => {
