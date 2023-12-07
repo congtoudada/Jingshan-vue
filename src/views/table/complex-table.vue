@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <!-- 查询操作 -->
-      <el-input v-model="listQuery.article_id" placeholder="ID" style="width: 100px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.articleId" placeholder="ID" style="width: 100px;" class="filter-item" @keyup.enter.native="handleFilter" />
       &nbsp;
       <el-input v-model="listQuery.author" placeholder="作者" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       &nbsp;
@@ -10,7 +10,7 @@
         <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item" />
       </el-select> -->
 
-      <el-select v-model="listQuery.map_id" placeholder="地图" clearable class="filter-item" style="width: 130px">
+      <el-select v-model="listQuery.mapId" placeholder="地图" clearable class="filter-item" style="width: 130px">
         <el-option v-for="(item, i) in mapTypeOptions" :key="i" :label="item" :value="i" />
       </el-select>
       &nbsp;
@@ -55,7 +55,7 @@
       <!-- id -->
       <el-table-column label="ID" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.article_id }}</span>
+          <span>{{ row.articleId }}</span>
         </template>
       </el-table-column>
 
@@ -69,9 +69,9 @@
       <!-- 地图名称 -->
       <el-table-column label="地图名" width="100px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.map_id | mapTypeFilter }}</span>
-          <!-- <span>{{ getMapType(row.map_id) }}</span> -->
-          <!-- <span>{{ row.map_id }}</span> -->
+          <span>{{ row.mapId | mapTypeFilter }}</span>
+          <!-- <span>{{ getMapType(row.mapId) }}</span> -->
+          <!-- <span>{{ row.mapId }}</span> -->
         </template>
       </el-table-column>
 
@@ -105,10 +105,10 @@
       </el-table-column>
 
       <!-- 展示图片 -->
-      <el-table-column label="展示图片" width="180px" align="center">
+      <el-table-column label="展示图片" width="160px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.image_url }}</span>
-          <!-- <img :src="row.image_url"/> -->
+          <span>{{ row.imageUrl }}</span>
+          <!-- <img :src="row.imageUrl"/> -->
         </template>
       </el-table-column>
 
@@ -246,8 +246,8 @@ export default {
     statusOptionFilter(status) {
       return statusOptions[status]
     },
-    mapTypeFilter(map_id) {
-      return mapTypeOptions[map_id]
+    mapTypeFilter(mapId) {
+      return mapTypeOptions[mapId]
     }
   },
   //声明成员变量
@@ -261,9 +261,9 @@ export default {
         page: 1,
         limit: 20,
         // importance: undefined,
-        article_id: undefined, //id过滤（可选）
+        articleId: undefined, //id过滤（可选）
         author: undefined, //作者过滤（可选）
-        map_id: undefined, //地图过滤（可选）
+        mapId: undefined, //地图过滤（可选）
         status: undefined, //审核状态过滤 (可选)
         sort: '+id'
       },
@@ -274,7 +274,7 @@ export default {
       // showReviewer: false,
       temp: {
         // id: undefined,
-        article_id: undefined,
+        articleId: undefined,
         author: '',
         teacher: '',
         // importance: 1,
@@ -284,8 +284,8 @@ export default {
         date: '',
         contact: '',
         saying: '',
-        image_url: '',
-        map_id: undefined,
+        imageUrl: '',
+        mapId: undefined,
         status: undefined
         // status: 'published',
         // type: ''
@@ -327,7 +327,7 @@ export default {
       this.getList()
     },
     handleModifyStatus(row, status) {
-      updateStatus(row.article_id, status).then(response => {
+      updateStatus(row.articleId, status).then(response => {
           this.$message({
           message: '操作Success',
           type: 'success'
@@ -352,7 +352,7 @@ export default {
     resetTemp() {
       this.temp = {
         // id: undefined,
-        article_id: undefined,
+        articleId: undefined,
         author: '',
         teacher: '',
         // importance: 1,
@@ -362,8 +362,8 @@ export default {
         date: '',
         contact: '',
         saying: '',
-        image_url: '',
-        map_id: undefined,
+        imageUrl: '',
+        mapId: undefined,
         status: undefined
         // status: 'published',
         // type: ''
@@ -424,7 +424,7 @@ export default {
     //   })
     // },
     handleDelete(row, index) {
-      deleteArticle(row.article_id).then(response => {
+      deleteArticle(row.articleId).then(response => {
           this.$notify({
               title: 'Success',
               message: 'Delete Successfully',
@@ -444,7 +444,7 @@ export default {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
         const tHeader = ['ID', '作者', '地图名', '班主任', '毕业时间', '联系方式', '想说的话', '图片地址', '审核状态']
-        const filterVal = ['article_id', 'author', 'map_id', 'teacher', 'date', 'contact', 'saying', 'image_url', "status"]
+        const filterVal = ['articleId', 'author', 'mapId', 'teacher', 'date', 'contact', 'saying', 'imageUrl', "status"]
         const data = this.formatJson(filterVal)
         excel.export_json_to_excel({
           header: tHeader,
@@ -456,7 +456,7 @@ export default {
     },
     formatJson(filterVal) {
       return this.list.map(v => filterVal.map(j => {
-          if (j === 'map_id') {
+          if (j === 'mapId') {
             return this.getMapType(v[j])
           } else if (j === 'status') {
             return this.getStatusOption(v[j])
@@ -472,8 +472,8 @@ export default {
       const sort = this.listQuery.sort
       return sort === `+${key}` ? 'ascending' : 'descending'
     },
-    getMapType: function(map_id) { //输入1-地图数
-      return this.mapTypeOptions[map_id]
+    getMapType: function(mapId) { //输入1-地图数
+      return this.mapTypeOptions[mapId]
     },
     getStatusOption: function(status) { //输入1,2 (1表示未审核，2表示已审核)
       return this.statusOptions[status]
