@@ -6,10 +6,6 @@
       &nbsp;
       <el-input v-model="listQuery.author" placeholder="作者" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       &nbsp;
-      <!-- <el-select v-model="listQuery.importance" placeholder="Imp" clearable style="width: 90px" class="filter-item">
-        <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item" />
-      </el-select> -->
-
       <el-select v-model="listQuery.mapId" placeholder="地图" clearable class="filter-item" style="width: 130px">
         <el-option v-for="(item, i) in mapTypeOptions" :key="i" :label="item" :value="i" />
       </el-select>
@@ -122,23 +118,6 @@
           <!-- <span>{{ row.status }}</span> -->
         </template>
       </el-table-column>
-      
-      <!-- <el-table-column v-if="showReviewer" label="Reviewer" width="110px" align="center">
-        <template slot-scope="{row}">
-          <span style="color:red;">{{ row.reviewer }}</span>
-        </template>
-      </el-table-column> -->
-      <!-- <el-table-column label="Imp" width="80px">
-        <template slot-scope="{row}">
-          <svg-icon v-for="n in + row.importance" :key="n" icon-class="star" class="meta-item__icon" />
-        </template>
-      </el-table-column> -->
-      <!-- <el-table-column label="Readings" align="center" width="95">
-        <template slot-scope="{row}">
-          <span v-if="row.pageviews" class="link-type" @click="handleFetchPv(row.pageviews)">{{ row.pageviews }}</span>
-          <span v-else>0</span>
-        </template>
-      </el-table-column> -->
 
       <el-table-column label="Actions" align="center" width="180" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
@@ -161,71 +140,13 @@
     <!-- 翻页 -->
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
     
-    <!-- 修改窗口 -->
-    <!-- <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="Type" prop="type">
-          <el-select v-model="temp.type" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="Date" prop="timestamp">
-          <el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date" />
-        </el-form-item>
-        <el-form-item label="Title" prop="title">
-          <el-input v-model="temp.title" />
-        </el-form-item>
-        <el-form-item label="Status">
-          <el-select v-model="temp.status" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="Imp">
-          <el-rate v-model="temp.importance" :colors="['#99A9BF', '#F7BA2A', '#FF9900']" :max="3" style="margin-top:8px;" />
-        </el-form-item>
-
-        <el-form-item label="Remark">
-          <el-input v-model="temp.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">
-          Cancel
-        </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
-          Confirm
-        </el-button>
-      </div>
-    </el-dialog> -->
-
-    <!-- <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
-      <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
-        <el-table-column prop="key" label="Channel" />
-        <el-table-column prop="pv" label="Pv" />
-      </el-table>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogPvVisible = false">Confirm</el-button>
-      </span>
-    </el-dialog> -->
   </div>
 </template>
 
 <script>
-// import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'
 import { fetchList, updateStatus, deleteArticle } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
-// import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-import { status } from 'nprogress'
-// import func from 'vue-editor-bridge'
-// import { map } from 'mock/user'
-
-// arr to obj, such as { CN : "China", US : "USA" }
-// const mapTypeKeyValue = mapTypeOptions.reduce((acc, cur) => {
-//   acc[cur.key] = cur.display_name
-//   return acc
-// }, {})
 
 const mapTypeOptions = ['全部地图', '操场', '初中部', '高中部', '小学部', '办公楼', '实验楼', '攀峰石', '宣传栏', '东门', '西门', '南门', '游泳池']
 const statusOptions = ['全部状态', '待审核', '已审核']
@@ -277,32 +198,13 @@ export default {
         articleId: undefined,
         author: '',
         teacher: '',
-        // importance: 1,
-        // remark: '',
-        // timestamp: new Date(),
-        // title: '',
         date: '',
         contact: '',
         saying: '',
         imageUrl: '',
         mapId: undefined,
         status: undefined
-        // status: 'published',
-        // type: ''
       },
-      // dialogFormVisible: false,
-      // dialogStatus: '',
-      // textMap: {
-      //   update: 'Edit',
-      //   create: 'Create'
-      // },
-      // dialogPvVisible: false,
-      // pvData: [],
-      // rules: {
-      //   type: [{ required: true, message: 'type is required', trigger: 'change' }],
-      //   timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-      //   title: [{ required: true, message: 'title is required', trigger: 'blur' }]
-      // },
       downloadLoading: false
     }
   },
@@ -315,10 +217,6 @@ export default {
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items //获取响应items
         this.total = response.data.total //获取响应total
-        // Just to simulate the time of the request
-        // setTimeout(() => {
-        //   this.listLoading = false
-        // }, 1.5 * 1000)
         this.listLoading = false
       })
     },
@@ -351,78 +249,17 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        // id: undefined,
         articleId: undefined,
         author: '',
         teacher: '',
-        // importance: 1,
-        // remark: '',
-        // timestamp: new Date(),
-        // title: '',
         date: '',
         contact: '',
         saying: '',
         imageUrl: '',
         mapId: undefined,
         status: undefined
-        // status: 'published',
-        // type: ''
       }
     },
-    // handleCreate() {
-    //   this.resetTemp()
-    //   this.dialogStatus = 'create'
-    //   this.dialogFormVisible = true
-    //   this.$nextTick(() => {
-    //     this.$refs['dataForm'].clearValidate()
-    //   })
-    // },
-    // createData() {
-    //   this.$refs['dataForm'].validate((valid) => {
-    //     if (valid) {
-    //       this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-    //       this.temp.author = 'vue-element-admin'
-    //       createArticle(this.temp).then(() => {
-    //         this.list.unshift(this.temp)
-    //         this.dialogFormVisible = false
-    //         this.$notify({
-    //           title: 'Success',
-    //           message: 'Created Successfully',
-    //           type: 'success',
-    //           duration: 2000
-    //         })
-    //       })
-    //     }
-    //   })
-    // },
-    // handleUpdate(row) {
-    //   this.temp = Object.assign({}, row) // copy obj
-    //   this.temp.timestamp = new Date(this.temp.timestamp)
-    //   this.dialogStatus = 'update'
-    //   this.dialogFormVisible = true
-    //   this.$nextTick(() => {
-    //     this.$refs['dataForm'].clearValidate()
-    //   })
-    // },
-    // updateData() {
-    //   this.$refs['dataForm'].validate((valid) => {
-    //     if (valid) {
-    //       const tempData = Object.assign({}, this.temp)
-    //       tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-    //       updateArticle(tempData).then(() => {
-    //         const index = this.list.findIndex(v => v.id === this.temp.id)
-    //         this.list.splice(index, 1, this.temp)
-    //         this.dialogFormVisible = false
-    //         this.$notify({
-    //           title: 'Success',
-    //           message: 'Update Successfully',
-    //           type: 'success',
-    //           duration: 2000
-    //         })
-    //       })
-    //     }
-    //   })
-    // },
     handleDelete(row, index) {
       deleteArticle(row.articleId).then(response => {
           this.$notify({
@@ -434,12 +271,6 @@ export default {
           this.list.splice(index, 1)
       })
     },
-    // handleFetchPv(pv) {
-    //   fetchPv(pv).then(response => {
-    //     this.pvData = response.data.pvData
-    //     this.dialogPvVisible = true
-    //   })
-    // },
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
