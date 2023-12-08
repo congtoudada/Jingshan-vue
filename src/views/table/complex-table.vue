@@ -103,8 +103,10 @@
       <!-- 展示图片 -->
       <el-table-column label="展示图片" width="160px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.imageUrl }}</span>
-          <!-- <img :src="row.imageUrl"/> -->
+          <!-- <span>{{ row.imageUrl }}</span> -->
+          <a :href="row.imageUrl" target="_blank">
+           <img :src="row.imageUrl" width="100px" align="center"/>
+           </a>
         </template>
       </el-table-column>
 
