@@ -3,7 +3,7 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">景山学校数字漫游App管理端</h3>
+        <h3 class="title">北京景山学校 - 数字漫游App管理端</h3>
       </div>
 
       <el-form-item prop="username">

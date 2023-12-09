@@ -111,7 +111,7 @@
       </el-table-column>
 
       <!-- 审核状态 -->
-      <el-table-column label="Status" class-name="status-col" width="100" align="center">
+      <el-table-column label="状态" class-name="status-col" width="100" align="center">
         <template slot-scope="{row}">
           <el-tag :type="row.status | statusFilter">
             {{ row.status | statusOptionFilter }}
@@ -121,7 +121,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Actions" align="center" width="180" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="180" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <!-- <el-button type="primary" size="mini" @click="handleUpdate(row)">
             Edit
@@ -263,7 +263,7 @@ export default {
       }
     },
     handleDelete(row, index) {
-      deleteArticle(row.articleId).then(response => {
+      deleteArticle(row.articleId, row.imageUrl).then(response => {
           this.$notify({
               title: 'Success',
               message: 'Delete Successfully',
@@ -276,7 +276,7 @@ export default {
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['ID', '作者', '地图名', '班主任', '毕业时间', '联系方式', '想说的话', '图片地址', '审核状态']
+        const tHeader = ['ID', '作者', '地图名', '班主任', '毕业时间', '联系方式', '想说的话', '图片地址', '状态']
         const filterVal = ['articleId', 'author', 'mapId', 'teacher', 'date', 'contact', 'saying', 'imageUrl', "status"]
         const data = this.formatJson(filterVal)
         excel.export_json_to_excel({

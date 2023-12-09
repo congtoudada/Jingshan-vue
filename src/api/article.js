@@ -27,11 +27,11 @@ export function updateStatus(id, status) {
 }
 
 //删除记录
-export function deleteArticle(id) {
+export function deleteArticle(id, imageUrl) {
   return request({
     url: '/article/delete',
     method: 'post',
-    params: { id }
+    params: { id, imageUrl }
   })
 }
 
